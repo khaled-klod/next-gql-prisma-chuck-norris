@@ -12,6 +12,7 @@
     "@graphql-tools/load-files": "6.0.18",
     "@graphql-tools/merge": "6.0.18",
     "@graphql-tools/schema": "6.0.18",
+    "@prisma/client": "^3.7.0",
     "apollo-server-micro": "^2.16.1",
     "graphql": "15.3.0",
     "next": "latest",
@@ -33,6 +34,7 @@
     "graphql-let": "0.x",
     "graphql-tag": "2.11.0",
     "jest": "26.4.0",
+    "prisma": "^3.7.0",
     "react-test-renderer": "^17.0.1",
     "typescript": "^3.9.7",
     "yaml-loader": "0.6.0"
