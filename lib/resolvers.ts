@@ -4,10 +4,18 @@ import { prisma } from './prisma';
 import { MutationResolvers, QueryResolvers } from '../__generated__/__types__'
 import { ResolverContext } from './apollo'
 
+const LIMIT = 4;
 
 const Query: Required<QueryResolvers<ResolverContext, Joke>> = {
   async allJokes(_parent, _args, _context, _info) {
-    const jokes = await prisma.joke.findMany({})
+    const {offset = 0, limit = LIMIT} = _args;
+    const jokes = await prisma.joke.findMany({
+      orderBy: {
+        score: 'desc',
+      },
+      skip: offset,
+      take: limit
+    });
     return jokes
   },
 }

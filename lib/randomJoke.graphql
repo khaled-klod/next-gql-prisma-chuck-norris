@@ -1,5 +1,5 @@
-query AllJokes {
-  allJokes {
+query AllJokes($offset: Int, $limit: Int) {
+  allJokes(offset: $offset, limit: $limit) {
     id
     content
     score

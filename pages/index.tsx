@@ -1,16 +1,13 @@
-import Link from "next/link";
 import { Dispatch, SetStateAction, useState } from "react";
 import {
   AllJokesQuery,
-  useAllJokesQuery,
   useVoteJokeMutation,
   AllJokesDocument,
-  VoteJokeMutation,
 } from "../lib/randomJoke.graphql";
 import { initializeApollo } from "../lib/apollo";
 import { NormalizedCacheObject, useMutation } from "@apollo/client";
 import { fetchRandomJoke } from "../helper/random-joke-helper";
-
+import Link from "next/link";
 interface RandomJokeProp {
   icon_url: string;
   id: string;
@@ -134,8 +131,13 @@ const Index: React.FC<PageProps> = (props) => {
             />
           </div>
         ) : (
-          <div className="w-md bg-indigo-600 border-4 border-indigo-900 rounded-lg shadow-2xl"><img src="/assets/spinner.gif" alt="loading" /></div>
+          <div className="w-md bg-indigo-600 border-4 border-indigo-900 rounded-lg shadow-2xl">
+            <img src="/assets/spinner.gif" alt="loading" />
+          </div>
         )}
+      </div>
+      <div className="text-xl text-center font-mono bg-fuchsia-200 mt-8 border-8 rounded p-4 border-fuchsia-300">
+        <span className="text-fuchsia-900"><Link href={"/results"}>Check Results</Link></span>
       </div>
     </div>
   );
