@@ -14,15 +14,20 @@ const Query: Required<QueryResolvers<ResolverContext, Joke>> = {
 
 const Mutation: Required<MutationResolvers<ResolverContext>> = {
   async voteJoke(_parent, _args, _context, _info) {
-    const {jokeName, points} = _args
-    const joke = await prisma.joke.update({
+    const {id, points, content} = _args
+    const joke = await prisma.joke.upsert({
       where: {
-        id: jokeName
+        id: id
       }, 
-      data: {
+      update: {
         score: {
           increment: points
         }
+      },
+      create : {
+        id,
+        score: 0,
+        content: content
       }
     })
     return joke

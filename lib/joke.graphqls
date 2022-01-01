@@ -1,6 +1,5 @@
 type Joke {
   id: ID!
-  name: String!
   content: String!
   score: Int!
 }

@@ -3,5 +3,5 @@ type Query {
 }
 
 type Mutation {
-  voteJoke(jokeName: String!, points: Int!): Joke!
+  voteJoke(id: ID!, points: Int!, content: String!): Joke!
 }

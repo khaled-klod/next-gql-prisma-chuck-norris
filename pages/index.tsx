@@ -15,11 +15,12 @@ const Index = (props) => {
 
   // const [updateNameMutation] = useUpdateNameMutation()
 
-  const onVoteJoke = (jokeName, score) => {
+  const onVoteJoke = (id, score, content) => {
     useVoteJokeMutation({
       variables: {
-        jokeName: jokeName,
+        id: id,
         points: score,
+        content: content
       },
       //Follow apollo suggestion to update cache
       //https://www.apollographql.com/docs/angular/features/cache-updates/#update
@@ -30,8 +31,8 @@ const Index = (props) => {
         const { allJokes } = cache.readQuery({
           query: AllJokesDocument,
         }) as AllJokesQuery;
-        const newJoke = allJokes.find(({ name }) => {
-          name === jokeName;
+        const newJoke = allJokes.find(({ id }) => {
+          id === id;
         });
         newJoke.score = data.voteJoke.score;
         const newAllJokes = { ...allJokes, newJoke };
@@ -61,19 +62,19 @@ const Index = (props) => {
 
           <div className="flex justify-around mt-8">
             <button
-              onClick={() => onVoteJoke(newJoke.id, 1)}
+              onClick={() => onVoteJoke(newJoke.id, 1, newJoke.value)}
               className="bg-green-500 text-slate-900 border-2 border-indigo-900 rounded p-2 shadow-xl"
             >
               LOL
             </button>
             <button
-              onClick={() => onVoteJoke(newJoke.id, 0)}
+              onClick={() => onVoteJoke(newJoke.id, 0, newJoke.value)}
               className="bg-yellow-500 text-slate-900 border-2 border-indigo-900 rounded p-2 shadow-xl"
             >
               Hmmm...
             </button>
             <button
-              onClick={() => onVoteJoke(newJoke.id, -1)}
+              onClick={() => onVoteJoke(newJoke.id, -1, newJoke.value)}
               className="bg-red-500 text-slate-900 border-2 border-indigo-900 rounded p-2 shadow-xl"
             >
               Lame!

@@ -14,8 +14,7 @@ datasource db {
 }
 
 model Joke {
-  id Int @id
-  name String
+  id String @id
   content String
   score Int @default(0)
 }
