@@ -1,22 +1,31 @@
-import { QueryResolvers, MutationResolvers } from './../__generated__/__types__';
+import { Joke } from './../__generated__/__types__';
+import { prisma } from './prisma';
+
+import { MutationResolvers, QueryResolvers } from '../__generated__/__types__'
 import { ResolverContext } from './apollo'
 
-const userProfile = {
-  id: String(1),
-  name: 'John Smith',
-  status: 'cached',
-}
 
-const Query: Required<QueryResolvers<ResolverContext>> = {
-  viewer(_parent, _args, _context, _info) {
-    return userProfile
+const Query: Required<QueryResolvers<ResolverContext, Joke>> = {
+  async allJokes(_parent, _args, _context, _info) {
+    const jokes = await prisma.joke.findMany({})
+    return jokes
   },
 }
 
 const Mutation: Required<MutationResolvers<ResolverContext>> = {
-  updateName(_parent, _args, _context, _info) {
-    userProfile.name = _args.name
-    return userProfile
+  async voteJoke(_parent, _args, _context, _info) {
+    const {jokeName, points} = _args
+    const joke = await prisma.joke.update({
+      where: {
+        id: jokeName
+      }, 
+      data: {
+        score: {
+          increment: points
+        }
+      }
+    })
+    return joke
   },
 }
 

@@ -1,7 +1,7 @@
 type Query {
-  viewer: User!
+  allJokes: [Joke!]
 }
 
 type Mutation {
-  updateName(name: String!): User!
+  voteJoke(jokeName: String!, points: Int!): Joke!
 }

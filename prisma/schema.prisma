@@ -14,7 +14,8 @@ datasource db {
 }
 
 model Joke {
-  id Int @default(autoincrement()) @id
+  id Int @id
+  name String
   content String
   score Int @default(0)
 }

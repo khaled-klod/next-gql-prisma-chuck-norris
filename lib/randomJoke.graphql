@@ -1,0 +1,14 @@
+query AllJokes {
+  allJokes {
+    name
+    content
+    score
+  }
+}
+
+mutation VoteJoke($jokeName: String!, $points: Int!) {
+  voteJoke(points: $points, jokeName: $jokeName) {
+    content
+    score
+  }
+}

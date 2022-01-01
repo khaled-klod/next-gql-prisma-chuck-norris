@@ -1,72 +1,113 @@
-import Link from 'next/link'
-import { useState } from 'react'
+import Link from "next/link";
+import { useState } from "react";
 import {
-  ViewerQuery,
-  useViewerQuery,
-  useUpdateNameMutation,
-  ViewerDocument,
-} from '../lib/viewer.graphql'
-import { initializeApollo } from '../lib/apollo'
+  AllJokesQuery,
+  useAllJokesQuery,
+  useVoteJokeMutation,
+  AllJokesDocument,
+} from "../lib/randomJoke.graphql";
+import { initializeApollo } from "../lib/apollo";
 
-const Index = () => {
-  const { viewer } = useViewerQuery().data!
-  const [newName, setNewName] = useState('')
-  const [updateNameMutation] = useUpdateNameMutation()
+const Index = (props) => {
+  // const { allJokes } = useAllJokesQuery().data!;
+  const [newJoke, setNewJoke] = useState(props.data);
+  console.log(`newJoke`, newJoke);
 
-  const onChangeName = () => {
-    updateNameMutation({
+  // const [updateNameMutation] = useUpdateNameMutation()
+
+  const onVoteJoke = (jokeName, score) => {
+    useVoteJokeMutation({
       variables: {
-        name: newName,
+        jokeName: jokeName,
+        points: score,
       },
       //Follow apollo suggestion to update cache
       //https://www.apollographql.com/docs/angular/features/cache-updates/#update
       update: (cache, mutationResult) => {
-        const { data } = mutationResult
-        if (!data) return // Cancel updating name in cache if no data is returned from mutation.
+        const { data } = mutationResult;
+        if (!data) return; // Cancel updating name in cache if no data is returned from mutation.
         // Read the data from our cache for this query.
-        const { viewer } = cache.readQuery({
-          query: ViewerDocument,
-        }) as ViewerQuery
-        const newViewer = { ...viewer }
+        const { allJokes } = cache.readQuery({
+          query: AllJokesDocument,
+        }) as AllJokesQuery;
+        const newJoke = allJokes.find(({ name }) => {
+          name === jokeName;
+        });
+        newJoke.score = data.voteJoke.score;
+        const newAllJokes = { ...allJokes, newJoke };
         // Add our comment from the mutation to the end.
-        newViewer.name = data.updateName.name
         // Write our data back to the cache.
-        cache.writeQuery({ query: ViewerDocument, data: { viewer: newViewer } })
+        cache.writeQuery({
+          query: AllJokesDocument,
+          data: { viewer: newAllJokes },
+        });
       },
-    })
-  }
+    });
+    // Fetch another random joke
+  };
 
   return (
-    <div>
-      You're signed in as {viewer.name} and you're {viewer.status}. Go to the{' '}
-      <Link href="/about">
-        <a>about</a>
-      </Link>{' '}
-      page.
-      <div>
-        <input
-          type="text"
-          placeholder="your new name..."
-          onChange={(e) => setNewName(e.target.value)}
-        />
-        <input type="button" value="change" onClick={onChangeName} />
+    <div className="flex flex-col justify-center items-center bg-indigo-400 w-screen h-screen">
+      <div className="max-w-md bg-indigo-600 border-4 border-indigo-900 p-8 rounded-lg shadow-2xl">
+        <div className="flex flex-col">
+          <div className="flex flex-col bg-indigo-500 rounded p-4">
+            <div className="h-1/6 self-center mb-4">
+              <img src={newJoke.icon_url} className="shadow-2xl" />
+            </div>
+            <div className="h-5/6">
+              <p className="text-3xl text-center font-mono">{newJoke.value}</p>
+            </div>
+          </div>
+
+          <div className="flex justify-around mt-8">
+            <button
+              onClick={() => onVoteJoke(newJoke.id, 1)}
+              className="bg-green-500 text-slate-900 border-2 border-indigo-900 rounded p-2 shadow-xl"
+            >
+              LOL
+            </button>
+            <button
+              onClick={() => onVoteJoke(newJoke.id, 0)}
+              className="bg-yellow-500 text-slate-900 border-2 border-indigo-900 rounded p-2 shadow-xl"
+            >
+              Hmmm...
+            </button>
+            <button
+              onClick={() => onVoteJoke(newJoke.id, -1)}
+              className="bg-red-500 text-slate-900 border-2 border-indigo-900 rounded p-2 shadow-xl"
+            >
+              Lame!
+            </button>
+          </div>
+        </div>
       </div>
     </div>
-  )
-}
+  );
+};
 
 export async function getStaticProps() {
-  const apolloClient = initializeApollo()
+  const apolloClient = initializeApollo();
 
   await apolloClient.query({
-    query: ViewerDocument,
-  })
+    query: AllJokesDocument,
+  });
+
+  const res = await fetch(`https://api.chucknorris.io/jokes/random`);
+  const data = await res.json();
+  console.log(`data`, data);
+
+  if (!data) {
+    return {
+      notFound: true,
+    };
+  }
 
   return {
     props: {
       initialApolloState: apolloClient.cache.extract(),
+      data,
     },
-  }
+  };
 }
 
-export default Index
+export default Index;
