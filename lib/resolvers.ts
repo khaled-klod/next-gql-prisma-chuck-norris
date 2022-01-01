@@ -26,7 +26,7 @@ const Mutation: Required<MutationResolvers<ResolverContext>> = {
       },
       create : {
         id,
-        score: 0,
+        score: points,
         content: content
       }
     })
