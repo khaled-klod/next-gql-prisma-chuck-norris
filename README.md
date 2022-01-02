@@ -1,3 +1,6 @@
+# Live demo
+https://next-gql-prisma-chuck-norris-qgi05y3ub-khaled-klod.vercel.app/
+
 # Designs
 Please find the simple UI design and some architecture diagrams in the following link https://excalidraw.com/#json=DjQAmAdYh-nd5TSGM4o7_,5Qs0l6QI8kcPeZAE6sxHNA
 
@@ -43,3 +46,8 @@ yarn create next-app --example with-typescript-graphql with-typescript-graphql-a
 ```
 
 Deploy it to the cloud with [Vercel](https://vercel.com/new?utm_source=github&utm_medium=readme&utm_campaign=next-example) ([Documentation](https://nextjs.org/docs/deployment)).
+
+# TODO
+[] Add lazy loading without page re-render
+[] Add sort by lamest and funniest
+[] When there is nothing more to show hide show more button
