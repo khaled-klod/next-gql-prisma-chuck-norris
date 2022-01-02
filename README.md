@@ -11,6 +11,9 @@ Implements a random joke generator + voting using this API https://api.chucknorr
 Useful resources:
 - https://davidparks.dev/blog/planetscale-deployment-with-prisma/
 - https://www.prisma.io/docs/concepts/components/prisma-client/crud#create
+- https://www.apollographql.com/docs/react/pagination/core-api/
+
+
 
 
 
