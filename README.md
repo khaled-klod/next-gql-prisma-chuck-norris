@@ -12,7 +12,7 @@ Useful resources:
 - https://davidparks.dev/blog/planetscale-deployment-with-prisma/
 - https://www.prisma.io/docs/concepts/components/prisma-client/crud#create
 - https://www.apollographql.com/docs/react/pagination/core-api/
-- https://tailwindcss.com/docs/installation
+- https://tailwindcss.com/docs/guides/nextjs
 
 
 
